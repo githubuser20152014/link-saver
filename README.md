@@ -14,13 +14,18 @@ Current Features:
 - 📋 Recent tab shows latest 10 links
 - 🔄 Favorites tab for starred links
 - 📚 All tab to view complete history
-
-Coming Soon:
+- 🔍 Real-time search across titles and URLs
 - 🔍 Search through saved links
 - ⭐ Add links to favorites
 - 🗑️ Delete saved links with confirmation
+
+Coming Soon:
+
 - 📤 Export/Import saved links
 - 📋 Right-click context menu integration
+- 🔄 Sync across devices
+- 📱 Mobile-friendly interface
+- 🎨 Customizable themes
 
 ## Installation
 
@@ -55,6 +60,7 @@ cd link-saver
    - Click any link to open it in a new tab
    - Click the star icon to add/remove from favorites
    - Click the trash icon to delete a link
+   - Use the search box to filter links by title or URL
 
 ## Project Structure
 

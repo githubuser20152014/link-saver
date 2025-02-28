@@ -136,7 +136,14 @@ function formatTimestamp(timestamp) {
 }
 
 function handleSearch(event) {
-  // Will implement search functionality later
+  const searchTerm = event.target.value.toLowerCase().trim();
+  
+  // Get the current active tab
+  const activeTab = document.querySelector('.tab-button.active');
+  const currentCollection = activeTab.dataset.tab;
+  
+  // Filter and display links with search
+  filterAndDisplayLinks(currentCollection, searchTerm);
 }
 
 function switchTab(selectedTab) {
@@ -155,19 +162,26 @@ function switchTab(selectedTab) {
   filterAndDisplayLinks(collection);
 }
 
-async function filterAndDisplayLinks(collection) {
+async function filterAndDisplayLinks(collection, searchTerm = '') {
   const links = await getStoredLinks();
   let filteredLinks = links;
   
+  // First filter by collection
   if (collection === 'favorites') {
     filteredLinks = links.filter(link => link.favorite);
   } else if (collection === 'recent') {
-    // Show only the most recent 10 links
     filteredLinks = links.slice(0, 10);
   } else if (collection === 'all') {
     filteredLinks = links;
   }
-  // Work tab filtering will be implemented later
+  
+  // Then filter by search term if it exists
+  if (searchTerm) {
+    filteredLinks = filteredLinks.filter(link => 
+      link.title.toLowerCase().includes(searchTerm) || 
+      link.url.toLowerCase().includes(searchTerm)
+    );
+  }
   
   displayLinks(filteredLinks);
 }
