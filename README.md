@@ -15,17 +15,16 @@ Current Features:
 - 🔄 Favorites tab for starred links
 - 📚 All tab to view complete history
 - 🔍 Real-time search across titles and URLs
-- 🔍 Search through saved links
-- ⭐ Add links to favorites
-- 🗑️ Delete saved links with confirmation
+- 📤 Export saved links as JSON
+- 📥 Import links from backup file
 
 Coming Soon:
 
-- 📤 Export/Import saved links
 - 📋 Right-click context menu integration
 - 🔄 Sync across devices
 - 📱 Mobile-friendly interface
 - 🎨 Customizable themes
+
 
 ## Installation
 
@@ -61,6 +60,9 @@ cd link-saver
    - Click the star icon to add/remove from favorites
    - Click the trash icon to delete a link
    - Use the search box to filter links by title or URL
+   - Click settings (...) to access Export/Import options
+   - Export your links as JSON for backup
+   - Import previously exported links
 
 ## Project Structure
 

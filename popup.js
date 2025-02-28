@@ -5,11 +5,21 @@ document.addEventListener('DOMContentLoaded', function() {
   // Add event listeners
   document.getElementById('addCurrentPage').addEventListener('click', saveCurrentPage);
   document.getElementById('searchInput').addEventListener('input', handleSearch);
+  document.getElementById('settings').addEventListener('click', toggleSettingsMenu);
+  document.getElementById('exportLinks').addEventListener('click', exportLinks);
+  document.getElementById('importLinks').addEventListener('click', importLinks);
   
   // Add tab switching functionality
   const tabButtons = document.querySelectorAll('.tab-button');
   tabButtons.forEach(button => {
     button.addEventListener('click', () => switchTab(button));
+  });
+
+  // Close settings menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.settings-container')) {
+      document.querySelector('.settings-menu').classList.remove('show');
+    }
   });
 });
 
@@ -235,4 +245,52 @@ async function toggleFavorite(link) {
   } catch (error) {
     console.error('Error toggling favorite:', error);
   }
+}
+
+function toggleSettingsMenu() {
+  document.querySelector('.settings-menu').classList.toggle('show');
+}
+
+async function exportLinks() {
+  try {
+    const links = await getStoredLinks();
+    const blob = new Blob([JSON.stringify(links, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `link-saver-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error exporting links:', error);
+  }
+}
+
+function importLinks() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  
+  input.onchange = async (e) => {
+    try {
+      const file = e.target.files[0];
+      const text = await file.text();
+      const links = JSON.parse(text);
+      
+      if (!Array.isArray(links)) {
+        throw new Error('Invalid file format');
+      }
+      
+      await chrome.storage.local.set({ 'saved_links': links });
+      await loadLinks();
+    } catch (error) {
+      console.error('Error importing links:', error);
+      alert('Error importing links. Please make sure the file is valid.');
+    }
+  };
+  
+  input.click();
 } 
