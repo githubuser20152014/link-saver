@@ -7,16 +7,18 @@ A clean, simple browser extension to save and organize links for later reading. 
 Current Features:
 - 🔗 Quick save current page with one click
 - 📱 Clean, minimal interface
-- 📂 Basic organization with tabs (Recent, Favorites, Work)
+- 📂 Basic organization with tabs (Recent, Favorites, All)
 - 🕒 Timestamp for each saved link
 - 💾 Local storage for saved links
 - 🖼️ Favicon support for visual recognition
+- 📋 Recent tab shows latest 10 links
+- 🔄 Favorites tab for starred links
+- 📚 All tab to view complete history
 
 Coming Soon:
 - 🔍 Search through saved links
 - ⭐ Add links to favorites
-- 🗑️ Delete saved links
-- 📁 Filter links by collection
+- 🗑️ Delete saved links with confirmation
 - 📤 Export/Import saved links
 - 📋 Right-click context menu integration
 
@@ -45,8 +47,14 @@ cd link-saver
 
 1. Click the Link Saver icon in your browser toolbar
 2. Click the + button to save the current page
-3. View your saved links organized by tabs
-4. Click any saved link to open it in a new tab
+3. View your saved links:
+   - Recent: Shows latest 10 saved links
+   - Favorites: Shows links marked with star
+   - All: Shows complete link history
+4. Manage your links:
+   - Click any link to open it in a new tab
+   - Click the star icon to add/remove from favorites
+   - Click the trash icon to delete a link
 
 ## Project Structure
 

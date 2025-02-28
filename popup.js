@@ -28,7 +28,8 @@ async function saveCurrentPage() {
       title: tab.title,
       favicon: tab.favIconUrl || 'icons/icon16.png',
       timestamp: new Date().toISOString(),
-      collection: 'recent'
+      collection: 'recent',
+      favorite: false
     };
 
     // Save to storage
@@ -89,6 +90,21 @@ function createLinkElement(link) {
   time.className = 'timestamp';
   time.textContent = formatTimestamp(link.timestamp);
   
+  // Create favorite button
+  const favoriteButton = document.createElement('button');
+  favoriteButton.className = `favorite-button ${link.favorite ? 'active' : ''}`;
+  favoriteButton.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/>
+    </svg>
+  `;
+  favoriteButton.title = link.favorite ? 'Remove from favorites' : 'Add to favorites';
+  favoriteButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await toggleFavorite(link);
+  });
+  
   // Create delete button
   const deleteButton = document.createElement('button');
   deleteButton.className = 'delete-button';
@@ -109,6 +125,7 @@ function createLinkElement(link) {
   details.appendChild(time);
   div.appendChild(img);
   div.appendChild(details);
+  div.appendChild(favoriteButton);
   div.appendChild(deleteButton);
   return div;
 }
@@ -131,11 +148,39 @@ function switchTab(selectedTab) {
   // Add active class to selected tab
   selectedTab.classList.add('active');
   
-  // Will implement collection filtering later
+  // Get the selected tab's collection
+  const collection = selectedTab.dataset.tab;
+  
+  // Filter and display links
+  filterAndDisplayLinks(collection);
+}
+
+async function filterAndDisplayLinks(collection) {
+  const links = await getStoredLinks();
+  let filteredLinks = links;
+  
+  if (collection === 'favorites') {
+    filteredLinks = links.filter(link => link.favorite);
+  } else if (collection === 'recent') {
+    // Show only the most recent 10 links
+    filteredLinks = links.slice(0, 10);
+  } else if (collection === 'all') {
+    filteredLinks = links;
+  }
+  // Work tab filtering will be implemented later
+  
+  displayLinks(filteredLinks);
 }
 
 async function deleteLink(linkToDelete) {
   try {
+    // Ask for confirmation
+    const confirmDelete = confirm(`Are you sure you want to delete this link?`);
+    
+    if (!confirmDelete) {
+      return; // User cancelled the deletion
+    }
+    
     // Get current links
     const links = await getStoredLinks();
     
@@ -152,5 +197,28 @@ async function deleteLink(linkToDelete) {
     await loadLinks();
   } catch (error) {
     console.error('Error deleting link:', error);
+  }
+}
+
+async function toggleFavorite(link) {
+  try {
+    // Get current links
+    const links = await getStoredLinks();
+    
+    // Find and update the link
+    const updatedLinks = links.map(l => {
+      if (l.url === link.url && l.timestamp === link.timestamp) {
+        return { ...l, favorite: !l.favorite };
+      }
+      return l;
+    });
+    
+    // Save updated links
+    await chrome.storage.local.set({ 'saved_links': updatedLinks });
+    
+    // Refresh the display
+    await loadLinks();
+  } catch (error) {
+    console.error('Error toggling favorite:', error);
   }
 } 
