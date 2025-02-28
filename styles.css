@@ -130,4 +130,35 @@
     color: #5f6368;
     font-size: 12px;
     display: block;
+  }
+  
+  .link-item .delete-button {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: #5f6368;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    font-size: 16px;
+    transition: all 0.2s;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .link-item:hover .delete-button {
+    opacity: 1;
+  }
+  
+  .link-item .delete-button:hover {
+    background-color: #f1f3f4;
+    color: #d93025;
+  }
+  
+  .link-item .delete-button svg {
+    pointer-events: none;
   } 

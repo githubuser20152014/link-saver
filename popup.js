@@ -89,11 +89,27 @@ function createLinkElement(link) {
   time.className = 'timestamp';
   time.textContent = formatTimestamp(link.timestamp);
   
+  // Create delete button
+  const deleteButton = document.createElement('button');
+  deleteButton.className = 'delete-button';
+  deleteButton.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
+    </svg>
+  `;
+  deleteButton.title = 'Delete link';
+  deleteButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await deleteLink(link);
+  });
+  
   // Assemble the elements
   details.appendChild(a);
   details.appendChild(time);
   div.appendChild(img);
   div.appendChild(details);
+  div.appendChild(deleteButton);
   return div;
 }
 
@@ -116,4 +132,25 @@ function switchTab(selectedTab) {
   selectedTab.classList.add('active');
   
   // Will implement collection filtering later
+}
+
+async function deleteLink(linkToDelete) {
+  try {
+    // Get current links
+    const links = await getStoredLinks();
+    
+    // Filter out the link to delete
+    const updatedLinks = links.filter(link => 
+      link.url !== linkToDelete.url || 
+      link.timestamp !== linkToDelete.timestamp
+    );
+    
+    // Save updated links
+    await chrome.storage.local.set({ 'saved_links': updatedLinks });
+    
+    // Refresh the display
+    await loadLinks();
+  } catch (error) {
+    console.error('Error deleting link:', error);
+  }
 } 
