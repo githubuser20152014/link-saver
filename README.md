@@ -1,0 +1,97 @@
+# Link Saver Browser Extension
+
+A clean, simple browser extension to save and organize links for later reading. Built for Chrome/Brave and other Chromium-based browsers.
+
+## Features
+
+Current Features:
+- 🔗 Quick save current page with one click
+- 📱 Clean, minimal interface
+- 📂 Basic organization with tabs (Recent, Favorites, Work)
+- 🕒 Timestamp for each saved link
+- 💾 Local storage for saved links
+- 🖼️ Favicon support for visual recognition
+
+Coming Soon:
+- 🔍 Search through saved links
+- ⭐ Add links to favorites
+- 🗑️ Delete saved links
+- 📁 Filter links by collection
+- 📤 Export/Import saved links
+- 📋 Right-click context menu integration
+
+## Installation
+
+### Development Setup
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/link-saver.git
+cd link-saver
+```
+
+2. Load in Chrome/Brave:
+   - Open Chrome/Brave
+   - Go to `chrome://extensions` or `brave://extensions`
+   - Enable "Developer mode" in the top right
+   - Click "Load unpacked"
+   - Select the `link-saver` directory
+
+### User Installation
+- Coming soon to the Chrome Web Store
+
+## Usage
+
+1. Click the Link Saver icon in your browser toolbar
+2. Click the + button to save the current page
+3. View your saved links organized by tabs
+4. Click any saved link to open it in a new tab
+
+## Project Structure
+
+```link-saver/README.md
+link-saver/
+├── icons/              # Extension icons
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
+├── manifest.json       # Extension configuration
+├── popup.html         # Main extension interface
+├── popup.js          # Extension functionality
+├── styles.css        # Extension styling
+└── README.md         # This file
+```
+
+## Development
+
+### Prerequisites
+- Chrome or Brave browser
+- Basic knowledge of HTML, CSS, and JavaScript
+- Git for version control
+
+### Local Development
+1. Make changes to the files
+2. Reload the extension in your browser
+3. Test the changes
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built with vanilla JavaScript
+- Uses Chrome Extension Manifest V3
+- Icons generated using custom icon generator
+```
+
+
