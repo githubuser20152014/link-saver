@@ -17,6 +17,9 @@ Current Features:
 - 🔍 Real-time search across titles and URLs
 - 📤 Export saved links as JSON
 - 📥 Import links from backup file
+- 🏷️ Add and edit tags for better organization
+- 🔍 Search by tag using #hashtag syntax
+- 🎯 Click tags to quickly filter by tag
 
 Coming Soon:
 
@@ -63,6 +66,9 @@ cd link-saver
    - Click settings (...) to access Export/Import options
    - Export your links as JSON for backup
    - Import previously exported links
+   - Click the tag icon to add/edit tags
+   - Use #tagname in search to filter by tag
+   - Click any tag to quickly filter by that tag
 
 ## Project Structure
 

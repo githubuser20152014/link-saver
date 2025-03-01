@@ -39,7 +39,8 @@ async function saveCurrentPage() {
       favicon: tab.favIconUrl || 'icons/icon16.png',
       timestamp: new Date().toISOString(),
       collection: 'recent',
-      favorite: false
+      favorite: false,
+      tags: []
     };
 
     // Save to storage
@@ -100,6 +101,42 @@ function createLinkElement(link) {
   time.className = 'timestamp';
   time.textContent = formatTimestamp(link.timestamp);
   
+  // Create tags container
+  const tagsContainer = document.createElement('div');
+  tagsContainer.className = 'tags-container';
+  
+  if (link.tags && link.tags.length > 0) {
+    link.tags.forEach(tag => {
+      const tagElement = document.createElement('span');
+      tagElement.className = 'tag';
+      tagElement.textContent = tag;
+      tagElement.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Set search input to #tag and trigger search
+        const searchInput = document.getElementById('searchInput');
+        searchInput.value = `#${tag}`;
+        searchInput.dispatchEvent(new Event('input'));
+      });
+      tagsContainer.appendChild(tagElement);
+    });
+  }
+  
+  // Create tag button
+  const tagButton = document.createElement('button');
+  tagButton.className = 'tag-button';
+  tagButton.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" fill="currentColor"/>
+    </svg>
+  `;
+  tagButton.title = 'Add/Edit Tags';
+  tagButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    showTagEditor(link);
+  });
+  
   // Create favorite button
   const favoriteButton = document.createElement('button');
   favoriteButton.className = `favorite-button ${link.favorite ? 'active' : ''}`;
@@ -133,8 +170,10 @@ function createLinkElement(link) {
   // Assemble the elements
   details.appendChild(a);
   details.appendChild(time);
+  details.appendChild(tagsContainer);
   div.appendChild(img);
   div.appendChild(details);
+  div.appendChild(tagButton);
   div.appendChild(favoriteButton);
   div.appendChild(deleteButton);
   return div;
@@ -187,10 +226,23 @@ async function filterAndDisplayLinks(collection, searchTerm = '') {
   
   // Then filter by search term if it exists
   if (searchTerm) {
-    filteredLinks = filteredLinks.filter(link => 
-      link.title.toLowerCase().includes(searchTerm) || 
-      link.url.toLowerCase().includes(searchTerm)
-    );
+    // Check if searching for a tag with #hashtag syntax
+    if (searchTerm.startsWith('#')) {
+      const tagSearch = searchTerm.slice(1).toLowerCase();
+      filteredLinks = filteredLinks.filter(link => 
+        link.tags && link.tags.some(tag => 
+          tag.toLowerCase().includes(tagSearch)
+        )
+      );
+    } else {
+      filteredLinks = filteredLinks.filter(link => 
+        link.title.toLowerCase().includes(searchTerm) || 
+        link.url.toLowerCase().includes(searchTerm) ||
+        (link.tags && link.tags.some(tag => 
+          tag.toLowerCase().includes(searchTerm)
+        ))
+      );
+    }
   }
   
   displayLinks(filteredLinks);
@@ -293,4 +345,35 @@ function importLinks() {
   };
   
   input.click();
+}
+
+function showTagEditor(link) {
+  const tags = link.tags || [];
+  const tagInput = prompt('Enter tags (comma separated):', tags.join(', '));
+  
+  if (tagInput === null) return; // User cancelled
+  
+  const newTags = tagInput.split(',')
+    .map(tag => tag.trim())
+    .filter(tag => tag.length > 0);
+  
+  updateLinkTags(link, newTags);
+}
+
+async function updateLinkTags(link, newTags) {
+  try {
+    const links = await getStoredLinks();
+    
+    const updatedLinks = links.map(l => {
+      if (l.url === link.url && l.timestamp === link.timestamp) {
+        return { ...l, tags: newTags };
+      }
+      return l;
+    });
+    
+    await chrome.storage.local.set({ 'saved_links': updatedLinks });
+    await loadLinks();
+  } catch (error) {
+    console.error('Error updating tags:', error);
+  }
 } 
