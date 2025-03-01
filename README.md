@@ -24,7 +24,6 @@ Current Features:
 
 Coming Soon:
 
-- 📋 Right-click context menu integration
 - 🔄 Sync across devices
 - 📱 Mobile-friendly interface
 - 🎨 Customizable themes
