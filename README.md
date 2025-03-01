@@ -20,6 +20,7 @@ Current Features:
 - 🏷️ Add and edit tags for better organization
 - 🔍 Search by tag using #hashtag syntax
 - 🎯 Click tags to quickly filter by tag
+- 📋 Right-click any link or page to save
 
 Coming Soon:
 
@@ -54,11 +55,12 @@ cd link-saver
 
 1. Click the Link Saver icon in your browser toolbar
 2. Click the + button to save the current page
-3. View your saved links:
+3. Or right-click any link or page and select "Save to Link Saver"
+4. View your saved links:
    - Recent: Shows latest 10 saved links
    - Favorites: Shows links marked with star
    - All: Shows complete link history
-4. Manage your links:
+5. Manage your links:
    - Click any link to open it in a new tab
    - Click the star icon to add/remove from favorites
    - Click the trash icon to delete a link
